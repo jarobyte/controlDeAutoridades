@@ -1,0 +1,60 @@
+    """
+    Los registros se fusionan si el nombre es exactamente igual.
+    
+    Parámetros:
+    registro_1 es un pandas DataFrame con una sola fila, con las mismas columnas que en registros.csv
+    registro_2 es un pandas DataFrame con una sola fila, con las mismas columnas que en registros.csv
+
+    Cada uno de ellos tiene las siguientes columnas:
+    ['curp',
+    'primer_apellido',
+    'segundo_apellido',
+    'nombres',
+    'fecha_de_nacimiento',
+    'pais_asociado',
+    'genero',
+    'cvu',
+    'orcid',
+    'rn',
+    'dni',
+    'pais_de_nacimiento',
+    'afiliacion',
+    'origen']
+
+    Salida:
+    Esta función regresa "True" si los registros deben fusionarse según los criterios, regresa "False" en 
+    caso contrario.
+    """
+    # Estas definiciones podrían usarse después, las quité para ahorrar memoria al correr el programa,
+    # en caso contrario, podría gastarse mucho tiempo relocalizando la memoria usada al guardar estos datos
+    # para todos los registros de la base (probablemente varias veces).
+    
+    # curp_1 = registro_1["curp"]
+    # primer_apellido_1 = registro_1["primer_apellido"]
+    # segundo_apellido_1 = registro_1["segundo_apellido"]
+    # nombres_1 = registro_1["nombres"]
+    # fecha_de_nacimiento_1 = registro_1["fecha_de_nacimiento"]
+    # pais_asociado_1 = registro_1["pais_asociado"]
+    # genero_1 = registro_1["genero"]
+    # cvu_1 = registro_1["cvu"]
+    # orcid_1 = registro_1["orcid"]
+    # rn_1 = registro_1["rn"]
+    # dni_1 = registro_1["dni"]
+    # pais_de_nacimiento_1 = registro_1["pais_de_nacimiento"]
+    # afiliacion_1 = registro_1["afiliacion"]
+    
+    return (
+                (
+                    (registro_1["nombres"] == registro_2["nombres"]) 
+                    & (registro_1["primer_apellido"] == registro_2["primer_apellido"]) 
+                    & (registro_1["segundo_apellido"] == registro_2["segundo_apellido"])
+                )
+                &
+                (
+                    (registro_1["curp"] == registro_2["curp"])
+                    | (registro_1["cvu"] == registro_2["cvu"])
+                    | (registro_1["orcid"] == registro_2["orcid"])
+                    | (registro_1["rn"] == registro_2["rn"])
+                    | (registro_1["dni"] == registro_2["dni"])
+                )
+            )
