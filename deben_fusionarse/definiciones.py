@@ -1,10 +1,71 @@
-import herramientas.lib as h
 import pandas as pd
 import re
 import numpy
 
+preposiciones = {"a", "ante", "bajo", "cabe", "con", "contra", "de",
+                 "desde", "durante", "en", "entre", "hacia", "hasta",
+                 "mediante", "para", "por", "según", "sin", "so", "sobre",
+                 "tras", "versus", "vía"}
+
+articulos = {"el", "la", "los", "las", "un", "unos", "una", "unas"}
+
+conectivos = {"y"}
+
+def difieren_por_letra_inicial(palabra1,palabra2):
+    return ((palabra1[1:] == palabra2[1:]) & (palabra1 != palabra2))
+
+def alguna_letra_inicial_diferente(lista_1, lista_2):
+    if len(lista_1) == len(lista_2):
+        for i in range(len(lista_1)):
+            if (letra_inicial_diferente(lista_1[i], lista_2[i])
+                & (lista_1[:i] == lista_2[:i])):
+                return True
+
+    return False
+
+def aplicar_a_listas(lista_1, lista_2, funcion):
+    contador = 0
+    if len(lista_1) == len(lista_2):
+        for i in range(len(lista_1)):
+            if (funcion(lista_1[i], lista_2[i])
+                & (suprimir_de_lista(lista_1, i)
+                   == suprimir_de_lista(lista_2, i))):
+                contador += 1
+    return (contador > 0)
+
+def suprimir_de_lista(lista, indice_del_elemento_a_suprimir):
+    return [x for x in lista if x != lista[indice_del_elemento_a_suprimir]]
+
+def difieren_por_letra_final(palabra1, palabra2):
+    return ((palabra1[:-1] == palabra2[:-1]) & (palabra1 != palabra2))
+
+def hay_abreviatura(palabra1, palabra2):
+    return (((palabra1[-1] == ".") | (palabra2[-1] == "."))
+            & (palabra1[0] == palabra2[0]))
+
+def una_letra_faltante(palabra1, palabra2):
+    if (len(palabra1) == len(palabra2) + 1):
+        for i in range(len(palabra1)):
+            if ((palabra1[0:i] == palabra2[0:i])
+                & (palabra1[(i + 1):] == palabra2[i:])):
+                return True
+    return False
+
+def letra_faltante(palabra1, palabra2):
+    return (una_letra_faltante(palabra1, palabra2)
+            | una_letra_faltante(palabra2, palabra1))
+
+def letra_distinta(palabra1, palabra2):
+    if (len(palabra1) == len(palabra2)):
+        for i in range(len(palabra1)):
+            if ((palabra1[0:i] == palabra2[0:i])
+                & (palabra1[i + 1:] == palabra2[i + 1:])):
+                return True
+    return False
+
+
 """
-Para cada una de las funciones, los parámetros 
+Para cada una de las siguientes funciones, los parámetros 
 registro_1
 registro_2
 deben de ser DataFrames de Pandas con una sola fila y las siguientes 
@@ -35,9 +96,9 @@ def similitud_0(registro_1, registro_2):
 def similitud_1(registro_1, registro_2):
     """Diferencia entre acentos, guiones, diacríticos, artículos y 
     preposiciones."""
-    palabras_prohibidas = (set(h.preposiciones)
-                           | set(h.articulos)
-                           | set(h.conectivos))
+    palabras_prohibidas = (set(preposiciones)
+                           | set(articulos)
+                           | set(conectivos))
     nombre_1 = (re.split("-|\s",registro_1["nombres"])
                 + re.split("-|\s",registro_1["primer_apellido"])
                 + re.split("-|\s",registro_1["segundo_apellido"]))
@@ -50,55 +111,55 @@ def similitud_1(registro_1, registro_2):
 def similitud_2(registro_1, registro_2):
     """1 letra sobrante o faltante 
     dentro de la palabra"""
-    return ((h.letra_faltante(registro_1["nombres"], registro_2["nombres"])
+    return ((letra_faltante(registro_1["nombres"], registro_2["nombres"])
              | (registro_1["nombres"] == registro_2["nombres"]))
             & 
-            (h.letra_faltante(registro_1["primer_apellido"],
+            (letra_faltante(registro_1["primer_apellido"],
                               registro_2["primer_apellido"])
              | (registro_1["primer_apellido"]
                 == registro_2["primer_apellido"])) 
             & 
-            (h.letra_faltante(registro_1["segundo_apellido"],
+            (letra_faltante(registro_1["segundo_apellido"],
                               registro_2["segundo_apellido"])
              | (registro_1["segundo_apellido"]
                 == registro_2["segundo_apellido"])))
     
 def similitud_3(registro_1, registro_2):
     """Letra inicial diferente en alguna de las partes del nombre"""
-    funcion = h.difieren_por_letra_inicial
-    return ((h.aplicar_a_listas(registro_1["nombres"].split(),
+    funcion = difieren_por_letra_inicial
+    return ((aplicar_a_listas(registro_1["nombres"].split(),
                                 registro_2["nombres"].split(),
                                 funcion))
-            |(h.aplicar_a_listas(registro_1["primer_apellido"].split(),
+            |(aplicar_a_listas(registro_1["primer_apellido"].split(),
                                  registro_2["primer_apellido"].split(),
                                  funcion))
-            |(h.aplicar_a_listas(registro_1["segundo_apellido"].split(),
+            |(aplicar_a_listas(registro_1["segundo_apellido"].split(),
                                  registro_2["segundo_apellido"].split(),
                                  funcion)))
 
 def similitud_4(registro_1, registro_2):
     """Última letra de la palabra diferente y las demás iguales"""
-    funcion = h.difieren_por_letra_final
-    return ((h.aplicar_a_listas(registro_1["nombres"].split(),
+    funcion = difieren_por_letra_final
+    return ((aplicar_a_listas(registro_1["nombres"].split(),
                                 registro_2["nombres"].split(),
                                 funcion))
-            |(h.aplicar_a_listas(registro_1["primer_apellido"].split(),
+            |(aplicar_a_listas(registro_1["primer_apellido"].split(),
                                  registro_2["primer_apellido"].split(),
                                  funcion))
-            |(h.aplicar_a_listas(registro_1["segundo_apellido"].split(),
+            |(aplicar_a_listas(registro_1["segundo_apellido"].split(),
                                  registro_2["segundo_apellido"].split(),
                                  funcion)))
             
 def similitud_5(registro_1, registro_2):
     """Hay abreviaturas"""
-    funcion = h.hay_abreviatura
-    return ((h.aplicar_a_listas(registro_1["nombres"].split(),
+    funcion = hay_abreviatura
+    return ((aplicar_a_listas(registro_1["nombres"].split(),
                                 registro_2["nombres"].split(),
                                 funcion))
-            |(h.aplicar_a_listas(registro_1["primer_apellido"].split(),
+            |(aplicar_a_listas(registro_1["primer_apellido"].split(),
                                  registro_2["primer_apellido"].split(),
                                  funcion))
-            |(h.aplicar_a_listas(registro_1["segundo_apellido"].split(),
+            |(aplicar_a_listas(registro_1["segundo_apellido"].split(),
                                  registro_2["segundo_apellido"].split(),
                                  funcion)))
 

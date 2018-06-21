@@ -1,5 +1,5 @@
 import preprocesamiento_parejas as pp
-import deben_fusionarse.lib as df
+from deben_fusionarse.definiciones import deben_fusionarse
 import pandas as pd
 import itertools
 import multiprocessing as mp
@@ -7,12 +7,12 @@ import multiprocessing as mp
 
 
 if __name__ == "__main__":
-    registros = pd.read_csv("datos/prueba_registros.csv")
+    registros = pd.read_csv("import/datos/prueba_registros.csv")
     parejas = itertools.combinations(range(registros.shape[0]), 2)
     block_size = 10
     numero_de_bloque = int(0)
     def deb_fus(tupla):
-        return df.deben_fusionarse(registros.iloc[tupla[0]],
+        return deben_fusionarse(registros.iloc[tupla[0]],
                                registros.iloc[tupla[1]])
 
     def procesarEnBloque(bloque):

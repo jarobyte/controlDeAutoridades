@@ -1,5 +1,5 @@
-import preprocesamiento_parejas as pp
-import deben_fusionarse.lib as df
+import .preprocesamiento_parejas as pp
+from .deben_fusionarse import lib as df
 import pandas as pd
 import itertools
 import multiprocessing as mp
