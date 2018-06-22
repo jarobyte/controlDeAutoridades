@@ -1,4 +1,3 @@
-import pandas as pd
 import re
 import numpy
 
@@ -87,11 +86,11 @@ columnas:
 """
 def similitud_0(registro_1, registro_2):
     """El nombre es exactamente igual."""
-    return ((registro_1["nombres"] == registro_2["nombres"]) 
-            & (registro_1["primer_apellido"]
-               == registro_2["primer_apellido"]) 
-            & (registro_1["segundo_apellido"]
-               == registro_2["segundo_apellido"]))
+    return ((registro_1[3] == registro_2[3]) 
+            & (registro_1[1]
+               == registro_2[1]) 
+            & (registro_1[2]
+               == registro_2[2]))
 
 def similitud_1(registro_1, registro_2):
     """Diferencia entre acentos, guiones, diacríticos, artículos y 
@@ -99,114 +98,114 @@ def similitud_1(registro_1, registro_2):
     palabras_prohibidas = (set(preposiciones)
                            | set(articulos)
                            | set(conectivos))
-    nombre_1 = (re.split("-|\s",registro_1["nombres"])
-                + re.split("-|\s",registro_1["primer_apellido"])
-                + re.split("-|\s",registro_1["segundo_apellido"]))
-    nombre_2 = (re.split("-|\s",registro_2["nombres"])
-                + re.split("-|\s",registro_2["primer_apellido"])
-                + re.split("-|\s",registro_2["segundo_apellido"]))
+    nombre_1 = (re.split("-|\s",registro_1[3])
+                + re.split("-|\s",registro_1[1])
+                + re.split("-|\s",registro_1[2]))
+    nombre_2 = (re.split("-|\s",registro_2[3])
+                + re.split("-|\s",registro_2[1])
+                + re.split("-|\s",registro_2[2]))
     return (set(nombre_1) ^ set(nombre_2) <= palabras_prohibidas)
 
 
 def similitud_2(registro_1, registro_2):
     """1 letra sobrante o faltante 
     dentro de la palabra"""
-    return ((letra_faltante(registro_1["nombres"], registro_2["nombres"])
-             | (registro_1["nombres"] == registro_2["nombres"]))
+    return ((letra_faltante(registro_1[3], registro_2[3])
+             | (registro_1[3] == registro_2[3]))
             & 
-            (letra_faltante(registro_1["primer_apellido"],
-                              registro_2["primer_apellido"])
-             | (registro_1["primer_apellido"]
-                == registro_2["primer_apellido"])) 
+            (letra_faltante(registro_1[1],
+                              registro_2[1])
+             | (registro_1[1]
+                == registro_2[1])) 
             & 
-            (letra_faltante(registro_1["segundo_apellido"],
-                              registro_2["segundo_apellido"])
-             | (registro_1["segundo_apellido"]
-                == registro_2["segundo_apellido"])))
+            (letra_faltante(registro_1[2],
+                              registro_2[2])
+             | (registro_1[2]
+                == registro_2[2])))
     
 def similitud_3(registro_1, registro_2):
     """Letra inicial diferente en alguna de las partes del nombre"""
     funcion = difieren_por_letra_inicial
-    return ((aplicar_a_listas(registro_1["nombres"].split(),
-                                registro_2["nombres"].split(),
+    return ((aplicar_a_listas(registro_1[3].split(),
+                                registro_2[3].split(),
                                 funcion))
-            |(aplicar_a_listas(registro_1["primer_apellido"].split(),
-                                 registro_2["primer_apellido"].split(),
+            |(aplicar_a_listas(registro_1[1].split(),
+                                 registro_2[1].split(),
                                  funcion))
-            |(aplicar_a_listas(registro_1["segundo_apellido"].split(),
-                                 registro_2["segundo_apellido"].split(),
+            |(aplicar_a_listas(registro_1[2].split(),
+                                 registro_2[2].split(),
                                  funcion)))
 
 def similitud_4(registro_1, registro_2):
     """Última letra de la palabra diferente y las demás iguales"""
     funcion = difieren_por_letra_final
-    return ((aplicar_a_listas(registro_1["nombres"].split(),
-                                registro_2["nombres"].split(),
+    return ((aplicar_a_listas(registro_1[3].split(),
+                                registro_2[3].split(),
                                 funcion))
-            |(aplicar_a_listas(registro_1["primer_apellido"].split(),
-                                 registro_2["primer_apellido"].split(),
+            |(aplicar_a_listas(registro_1[1].split(),
+                                 registro_2[1].split(),
                                  funcion))
-            |(aplicar_a_listas(registro_1["segundo_apellido"].split(),
-                                 registro_2["segundo_apellido"].split(),
+            |(aplicar_a_listas(registro_1[2].split(),
+                                 registro_2[2].split(),
                                  funcion)))
             
 def similitud_5(registro_1, registro_2):
     """Hay abreviaturas"""
     funcion = hay_abreviatura
-    return ((aplicar_a_listas(registro_1["nombres"].split(),
-                                registro_2["nombres"].split(),
+    return ((aplicar_a_listas(registro_1[3].split(),
+                                registro_2[3].split(),
                                 funcion))
-            |(aplicar_a_listas(registro_1["primer_apellido"].split(),
-                                 registro_2["primer_apellido"].split(),
+            |(aplicar_a_listas(registro_1[1].split(),
+                                 registro_2[1].split(),
                                  funcion))
-            |(aplicar_a_listas(registro_1["segundo_apellido"].split(),
-                                 registro_2["segundo_apellido"].split(),
+            |(aplicar_a_listas(registro_1[2].split(),
+                                 registro_2[2].split(),
                                  funcion)))
 
 def similitud_6(registro_1, registro_2):
     """El campo de nombre de uno contiene dos o más elementos que otro."""
-    return ((len(set(registro_1["nombres"].split())
-                 & set(registro_2["nombres"].split()))
-             == min(len(registro_1["nombres"].split()),
-                    len(registro_2["nombres"].split())))
-             & (registro_1["primer_apellido"]
-                == registro_2["primer_apellido"])
-             & (registro_1["segundo_apellido"]
-                == registro_2["segundo_apellido"]))
+    return ((len(set(registro_1[3].split())
+                 & set(registro_2[3].split()))
+             == min(len(registro_1[3].split()),
+                    len(registro_2[3].split())))
+             & (registro_1[1]
+                == registro_2[1])
+             & (registro_1[2]
+                == registro_2[2]))
 
 def similitud_7(registro_1, registro_2):
     """El campo de nombre de uno contiene dos o más elementos distintos 
     al otro y los campos de apellido son iguales."""
-    if ((len(registro_1["nombres"].split())
-        == len(registro_2["nombres"].split()))
-        & (registro_1["nombres"] != registro_2["nombres"])):
-        return ((len(set(registro_1["nombres"].split())
-                     & set(registro_2["nombres"].split()))
-                 < len(registro_1["nombres"].split()))
-                & (registro_1["primer_apellido"]
-                   == registro_2["primer_apellido"])
-                & (registro_1["segundo_apellido"]
-                   == registro_2["segundo_apellido"]))
+    if ((len(registro_1[3].split())
+        == len(registro_2[3].split()))
+        & (registro_1[3] != registro_2[3])):
+        return ((len(set(registro_1[3].split())
+                     & set(registro_2[3].split()))
+                 < len(registro_1[3].split()))
+                & (registro_1[1]
+                   == registro_2[1])
+                & (registro_1[2]
+                   == registro_2[2]))
     return False
 
 def similitud_8(registro_1, registro_2):
     """Si alguno de los campos es completamente diferente entre uno y 
     otro."""
-    return (((registro_1["nombres"] != registro_2["nombres"])
-             & (registro_1["primer_apellido"]
-                == registro_2["primer_apellido"])
-             & (registro_1["segundo_apellido"]
-                == registro_2["segundo_apellido"]))
-             | ((registro_1["nombres"] == registro_2["nombres"])
-               & (registro_1["primer_apellido"]
-                  != registro_2["primer_apellido"])
-               & (registro_1["segundo_apellido"]
-                  == registro_2["segundo_apellido"]))
-             |((registro_1["nombres"] == registro_2["nombres"])
-               & (registro_1["primer_apellido"]
-                  == registro_2["primer_apellido"])
-               & (registro_1["segundo_apellido"]
-                  != registro_2["segundo_apellido"])))
+    return (((registro_1[3] != registro_2[3])
+             & (registro_1[1]
+                == registro_2[1])
+             & (registro_1[2]
+                == registro_2[2]))
+             | ((registro_1[3] == registro_2[3])
+               & (registro_1[1]
+                  != registro_2[1])
+               & (registro_1[2]
+                  == registro_2[2]))
+             |((registro_1[3] == registro_2[3])
+               & (registro_1[1]
+                  == registro_2[1])
+               & (registro_1[2]
+                  != registro_2[2])))
 
 def deben_fusionarse(registro_1, registro_2):
     if existen_identificadores(registro_1, registro_2):
@@ -223,19 +222,21 @@ def deben_fusionarse(registro_1, registro_2):
                 return True
     return False
 
+
 def existen_identificadores(registro_1, registro_2):
-    return ((registro_1["curp"] == registro_2["curp"])
-            or (registro_1["cvu"] == registro_2["cvu"])
-            or (registro_1["orcid"] == registro_2["orcid"])
-            or (registro_1["rn"] == registro_2["rn"])
-            or (registro_1["dni"] == registro_2["dni"]))
+    return ((registro_1[0] == registro_2[0])
+            or (registro_1[7] == registro_2[7])
+            or (registro_1[8] == registro_2[8])
+            or (registro_1[9] == registro_2[9])
+            or (registro_1[10] == registro_2[10]))
+
 
 def existen_datos_auxiliares(registro_1, registro_2):
-    return ((registro_1["pais_de_nacimiento"]
-             == registro_2["pais_de_nacimiento"])
-            or (registro_1["pais_asociado"]
-                 == registro_2["pais_asociado"])
-            or (registro_1["fecha_de_nacimiento"]
-                 == registro_2["fecha_de_nacimiento"])
-            or (registro_1["afiliacion"] == registro_2["afiliacion"])
-            or (registro_1["genero"] == registro_2["genero"]))
+    return ((registro_1[11]
+             == registro_2[11])
+            or (registro_1[5]
+                 == registro_2[5])
+            or (registro_1[4]
+                 == registro_2[4])
+            or (registro_1[12] == registro_2[12])
+            or (registro_1[6] == registro_2[6]))
