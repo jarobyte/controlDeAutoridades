@@ -21,8 +21,8 @@ resultado = [x for x in tqdm(p.imap_unordered(func = fun,
                                          iterable = parejas,
                                               chunksize = chunk_size),
                              total = numero_de_parejas / chunk_size) if x!= None]
-# resultado = [x for x in tqdm(p.imap_unordered(func = fun,
-#                                               iterable = parejas,
-#                                               chunksize = chunk_size),
-#                              total = numero_de_parejas)]
-print(resultado)
+
+with open("parejas.txt", 'w+') as archivo:
+    for i in resultado:
+        archivo.write(str(i))
+        archivo.write("\n")
