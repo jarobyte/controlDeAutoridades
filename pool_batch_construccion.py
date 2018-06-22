@@ -12,10 +12,10 @@ def fun(tupla):
 def fun_filt(batch):
     return list(filter(fun, batch))
 
-registros = pd.read_csv("import/datos/prueba_registros.csv")
+registros = pd.read_csv("import/datos/registros.csv")
 parejas = itertools.combinations(range(registros.shape[0]), 2)
 numero_de_parejas = int((registros.shape[0]) * (registros.shape[0] - 1) / 2)
-chunk_size = 9
+chunk_size = 10000
 p = Pool()
 resultado = [x for x in tqdm(p.imap_unordered(func = fun,
                                          iterable = parejas,
