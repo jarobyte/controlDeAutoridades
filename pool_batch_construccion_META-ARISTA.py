@@ -17,20 +17,22 @@ print("el archivo " + archivo + " ha sido cargado...ES CORRECTO??")
 print()
 
 parser = argparse.ArgumentParser(description = "")
-parser.add_argument('--lower_limit',
+parser.add_argument('--first-range',
                     type = int,
-                    default = 0)
-parser.add_argument('--upper_limit',
+                    nargs = 2)
+parser.add_argument('--second-range',
                     type = int, 
-                    default = registros.shape[0])
+                    nargs = 2)
 args = parser.parse_args()
-lower_limit = int(args.lower_limit)
-upper_limit = int(args.upper_limit)
+first_range = list(map(int, args.first_range))
+second_range = list(map(int, args.second_range))
 
-numero_de_registros = upper_limit - lower_limit 
-parejas = itertools.combinations(range(lower_limit, upper_limit), 2)
-numero_de_parejas = int((numero_de_registros) * (numero_de_registros - 1) / 2)
-
+parejas = itertools.product(range(first_range[0],
+                                  first_range[1]),
+                            range(second_range[0],
+                                  second_range[1]))
+numero_de_parejas = int((first_range[1] - first_range[0])
+                        * (second_range[1] - second_range[0]))
 chunk_size = 10000
 p = Pool()
 
