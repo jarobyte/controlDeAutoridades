@@ -14,17 +14,23 @@ def fun(tupla):
 def fun_filt(batch):
     return list(filter(fun, batch))
 
+registros = pd.read_csv("import/datos/prueba_registros.csv").values
 parser = argparse.ArgumentParser(description = "")
-parser.add_argument('lower_limit', type = int)
-parser.add_argument('upper_limit', type = int)
+parser.add_argument('--lower_limit',
+                    type = int,
+                    default = 0)
+parser.add_argument('--upper_limit',
+                    type = int, 
+                    default = registros.shape[0])
 args = parser.parse_args()
 lower_limit = int(args.lower_limit)
 upper_limit = int(args.upper_limit)
-registros = pd.read_csv("import/datos/prueba_registros.csv").values
+numero_de_registros = upper_limit - lower_limit 
 parejas = itertools.combinations(range(lower_limit, upper_limit), 2)
-numero_de_parejas = int((registros.shape[0]) * (registros.shape[0] - 1) / 2)
+numero_de_parejas = int((numero_de_registros) * (numero_de_registros - 1) / 2)
 chunk_size = 10000
 p = Pool()
+
 resultado = [x for x in tqdm(p.imap_unordered(func = fun,
                                          iterable = parejas,
                                               chunksize = chunk_size),
