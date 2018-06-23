@@ -1,7 +1,6 @@
 import pandas as pd
 import itertools
 from multiprocessing import Pool
-import construccion as c
 from tqdm import tqdm
 from deben_fusionarse.definiciones import existen_identificadores as function
 import argparse
@@ -11,24 +10,24 @@ def fun(tupla):
         return tupla
     return
 
-archivo = "import/datos/prueba_registros.csv"
-registros = pd.read_csv(archivo).values
-print("el archivo " + archivo + " ha sido cargado...ES CORRECTO??")
+base_de_datos = "import/datos/prueba_registros.csv"
+registros = pd.read_csv(base_de_datos).values
+print("el archivo " + base_de_datos + " ha sido cargado...ES CORRECTO??")
 print()
 
 parser = argparse.ArgumentParser(description = "")
-parser.add_argument('--lower_limit',
+parser.add_argument('--inicio',
                     type = int,
                     default = 0)
-parser.add_argument('--upper_limit',
+parser.add_argument('--final',
                     type = int, 
                     default = registros.shape[0])
 args = parser.parse_args()
-lower_limit = int(args.lower_limit)
-upper_limit = int(args.upper_limit)
+inicio = int(args.inicio)
+final = int(args.final)
 
-numero_de_registros = upper_limit - lower_limit 
-parejas = itertools.combinations(range(lower_limit, upper_limit), 2)
+numero_de_registros = final - inicio 
+parejas = itertools.combinations(range(inicio, final), 2)
 numero_de_parejas = int((numero_de_registros) * (numero_de_registros - 1) / 2)
 
 chunk_size = 10000
@@ -39,6 +38,22 @@ resultado = [x for x in tqdm(p.imap_unordered(func = fun,
                                               chunksize = chunk_size),
                              total = numero_de_parejas) if x is not None]
 
-with open("parejas.txt", 'w+') as archivo:
+
+ruta_de_salida = ("resultados/"
+        + "parejas--"
+        + base_de_datos.replace("/","_")
+        + "--("
+        + str(inicio)
+        + "-"
+        + str(final)
+        + ")x"
+        + "("
+        + str(inicio)
+        + "-"
+        + str(final)
+        + ")")
+with open(file = ruta_de_salida,
+          mode = 'w+') as archivo:
     archivo.write(str(resultado))
     archivo.write("\n")
+print("resultados registrados en:" + ruta_de_salida)
