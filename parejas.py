@@ -12,7 +12,7 @@ def fun(tupla):
 
 base_de_datos = "import/datos/prueba_registros.csv"
 registros = pd.read_csv(base_de_datos).values
-print("el archivo " + base_de_datos + " ha sido cargado...ES CORRECTO??")
+print("el archivo " + base_de_datos + " ha sido cargado...ES CORRECTO mi papa esta aqui??")
 print()
 
 parser = argparse.ArgumentParser(description = "")
