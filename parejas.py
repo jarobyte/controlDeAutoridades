@@ -10,7 +10,7 @@ def fun(tupla):
         return tupla
     return
 
-def grouper(iterable, n, fillvalue=None):
+def grouper(iterable, n, fillvalue=(0, 1)):
     "Collect data into fixed-length chunks or blocks"
     # grouper('ABCDEFG', 3, 'x') --> ABC DEF Gxx"
     args = [iter(iterable)] * n
@@ -19,9 +19,8 @@ def grouper(iterable, n, fillvalue=None):
 base_de_datos = "import/datos/prueba_registros.csv"
 registros = pd.read_csv(base_de_datos).values
 print("el archivo " + base_de_datos + " ha sido cargado...ES CORRECTO??")
+
 if __name__ == '__main__':
-
-
     parser = argparse.ArgumentParser(description = "")
     parser.add_argument('--inicio',
                         type = int,
@@ -37,7 +36,7 @@ if __name__ == '__main__':
     parejas = itertools.combinations(range(inicio, final), 2)
     numero_de_parejas = int((numero_de_registros) * (numero_de_registros - 1) / 2)
 
-    chunk_size = 5
+    chunk_size = 7
     p = Pool()
 
     resultado = list(itertools.chain.from_iterable(tqdm(p.imap_unordered(func = list,
