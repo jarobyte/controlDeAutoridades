@@ -11,7 +11,7 @@ def fun(tupla):
     return
 
 base_de_datos = "import/datos/registros.csv"
-registros = pd.read_csv(base_de_datos).values
+registros = pd.read_csv(base_de_datos, low_memory = False).values
 print("el archivo " + base_de_datos + " ha sido cargado...ES CORRECTO??")
 
 parser = argparse.ArgumentParser(description = "")
