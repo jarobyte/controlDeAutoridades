@@ -44,7 +44,7 @@ resultado = [x for x in tqdm(p.imap_unordered(func = fun,
 ruta_de_salida = ("resultados/"
         + "parejas--"
         + base_de_datos.replace("/","_")
-        + "("
+        + "--("
         + str(primer_rango[0])
         + "-"
         + str(primer_rango[1])
