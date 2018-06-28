@@ -16,7 +16,7 @@ def grouper(iterable, n, fillvalue=(0, 1)):
     args = [iter(iterable)] * n
     return itertools.zip_longest(*args, fillvalue=fillvalue)
 
-base_de_datos = "import/datos/prueba_registros.csv"
+base_de_datos = "import/datos/registros.csv"
 registros = pd.read_csv(base_de_datos).values
 print("el archivo " + base_de_datos + " ha sido cargado...ES CORRECTO??")
 
@@ -36,7 +36,7 @@ if __name__ == '__main__':
     parejas = itertools.combinations(range(inicio, final), 2)
     numero_de_parejas = int((numero_de_registros) * (numero_de_registros - 1) / 2)
 
-    chunk_size = 7
+    chunk_size = 1000
     p = Pool()
 
     resultado = list(itertools.chain.from_iterable(tqdm(p.imap_unordered(func = list,
