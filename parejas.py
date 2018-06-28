@@ -32,6 +32,8 @@ numero_de_parejas = int((numero_de_registros) * (numero_de_registros - 1) / 2)
 chunk_size = 10000
 p = Pool()
 
+print('Usando registros ' + str(inicio) + "-" + str(final))
+
 resultado = [x for x in tqdm(p.imap_unordered(func = fun,
                                               iterable = parejas,
                                               chunksize = chunk_size),

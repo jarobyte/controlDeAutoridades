@@ -10,7 +10,7 @@ def fun(tupla):
         return tupla
     return
 
-base_de_datos = "import/datos/prueba_registros.csv"
+base_de_datos = "import/datos/registros.csv"
 registros = pd.read_csv(base_de_datos).values
 print("el archivo " + base_de_datos + " ha sido cargado...ES CORRECTO??")
 
@@ -33,6 +33,8 @@ numero_de_parejas = int((primer_rango[1] - primer_rango[0])
                         * (segundo_rango[1] - segundo_rango[0]))
 chunk_size = 10000
 p = Pool()
+
+print("Usando registros " + str(primer_rango) + " x " + str(segundo_rango))
 
 resultado = [x for x in tqdm(p.imap_unordered(func = fun,
                                          iterable = parejas,
