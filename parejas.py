@@ -13,7 +13,6 @@ def fun(tupla):
 base_de_datos = "import/datos/prueba_registros.csv"
 registros = pd.read_csv(base_de_datos).values
 print("el archivo " + base_de_datos + " ha sido cargado...ES CORRECTO??")
-print()
 
 parser = argparse.ArgumentParser(description = "")
 parser.add_argument('--inicio',
@@ -34,7 +33,7 @@ chunk_size = 10000
 p = Pool()
 
 resultado = [x for x in tqdm(p.imap_unordered(func = fun,
-                                         iterable = parejas,
+                                              iterable = parejas,
                                               chunksize = chunk_size),
                              total = numero_de_parejas) if x is not None]
 
@@ -56,4 +55,5 @@ with open(file = ruta_de_salida,
           mode = 'w+') as archivo:
     archivo.write(str(resultado))
     archivo.write("\n")
+    
 print("resultados registrados en:" + ruta_de_salida)
