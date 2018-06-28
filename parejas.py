@@ -36,7 +36,7 @@ if __name__ == '__main__':
     parejas = itertools.combinations(range(inicio, final), 2)
     numero_de_parejas = int((numero_de_registros) * (numero_de_registros - 1) / 2)
 
-    chunk_size = 1000
+    chunk_size = 10000
     p = Pool()
 
     resultado = list(itertools.chain.from_iterable(tqdm(p.imap_unordered(func = list,
