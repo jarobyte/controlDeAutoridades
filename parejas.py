@@ -10,7 +10,7 @@ def fun(tupla):
         return tupla
     return
 
-base_de_datos = "import/datos/prueba_registros.csv"
+base_de_datos = "import/datos/registros.csv"
 registros = pd.read_csv(base_de_datos).values
 print("el archivo " + base_de_datos + " ha sido cargado...ES CORRECTO??")
 
