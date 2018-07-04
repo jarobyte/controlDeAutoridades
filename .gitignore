@@ -4,4 +4,4 @@ import/*
 #*
 *.pyc
 resultados/*
-^.ipynb
+.ipynb_checkpoints
