@@ -20,7 +20,7 @@ personas = list(enumerate(lista))
 # In[3]:
 
 
-base = pd.read_csv("import/datos/registros.csv")
+base = pd.read_csv("registros.csv")
 df = base.values
 
 
@@ -30,11 +30,11 @@ df = base.values
 def enviar_a_identificadores(tupla):
     persona = df[tupla[1]]
     identificador_CA = tupla[0]
-    curps_persona = persona[:, [0,13]]
-    cvus_persona = persona[:,[7,13]]
-    orcids_persona = persona[:,[8,13]]
-    rns_persona = persona[:,[9,13]]
-    dni_persona = persona[:,[10,13]]
+    curps_persona = persona[:, [0,13,14]]
+    cvus_persona = persona[:,[7,13,14]]
+    orcids_persona = persona[:,[8,13,14]]
+    rns_persona = persona[:,[9,13,14]]
+    dni_persona = persona[:,[10,13,14]]
     identificadores = ([[identificador_CA] + ["curp"] + list(renglon) for renglon in curps_persona] + 
                    [[identificador_CA] + ["cvu"] + list(renglon) for renglon in cvus_persona] + 
                    [[identificador_CA] + ["orcid"] + list(renglon) for renglon in orcids_persona] + 
@@ -76,7 +76,7 @@ identificadores
 # In[7]:
 
 
-per = personas[0:10]
+per = personas
 final = []
 p = mp.Pool()
 for i in list(p.map(enviar_a_identificadores, per)):
@@ -87,7 +87,7 @@ final
 # In[10]:
 
 
-identificadores = pd.DataFrame(final, columns = ["identificador_CA", "tipo_de_identificador", "valor", "origen"])
+identificadores = pd.DataFrame(final, columns = ["identificador_CA", "tipo_de_identificador", "valor", "origen", "numero_de_registro"])
 
 
 # In[11]:

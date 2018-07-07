@@ -1,4 +1,4 @@
-with open("personas.txt", "r") as archivo:
+with open("personas_final.txt", "r") as archivo:
     cadena = archivo.read()
 lista = eval(cadena)
 personas = list(enumerate(lista))
@@ -92,7 +92,7 @@ def enviar_a_registro_principal(tupla):
 import multiprocessing as mp
 
 p = mp.Pool()
-per = personas[0:10]
+per = personas
 array = p.map(func = enviar_a_registro_principal, iterable = iter(per))
 reg_prin = pd.DataFrame(array, columns = columnas_registro_principal)
 reg_prin.to_csv("rp.csv")

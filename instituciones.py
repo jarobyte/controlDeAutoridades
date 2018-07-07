@@ -20,7 +20,7 @@ personas = list(enumerate(lista))
 # In[3]:
 
 
-base = pd.read_csv("import/datos/registros.csv")
+base = pd.read_csv("registros.csv")
 df = base.values
 
 
@@ -71,7 +71,7 @@ identificadores
 # In[7]:
 
 
-per = personas[0:10]
+per = personas
 final = []
 p = mp.Pool()
 for i in list(p.map(enviar_a_instituciones, per)):
